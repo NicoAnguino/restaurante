@@ -10,3 +10,7 @@ export const esUsuarioLogueado = () => {
         user !== null && (estaLogueado = true)
     })
 }
+
+export const buscarUsuarioActual = () => {
+    return firebase.auth().currentUser
+}
