@@ -7,7 +7,7 @@ import Restaurantes from '../screens/Restaurantes'
 import Favoritos from '../screens/Favoritos'
 import TopRestaurantes from '../screens/TopRestaurantes'
 import Buscar from '../screens/Buscar'
-import Account from '../screens/Account'
+import Account from '../screens/account/Account'
 import { Icon } from 'react-native-elements/dist/icons/Icon'
 
 const Tab = createBottomTabNavigator()
