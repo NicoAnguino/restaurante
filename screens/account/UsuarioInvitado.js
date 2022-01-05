@@ -2,8 +2,11 @@ import React from 'react'
 import { StyleSheet, Text, View, ScrollView,Image } from 'react-native'
 //import { Button } from 'react-native-elements/dist/buttons/Button'
 import { Button } from 'react-native-elements'
+import {useNavigation} from '@react-navigation/native'
 
 export default function UsuarioInvitado() {
+    const navigation = useNavigation()
+
     return (
         <ScrollView
             centerContent
@@ -20,7 +23,7 @@ export default function UsuarioInvitado() {
             <Button 
                 title="Ver tu perfil"
                 buttonStyle={styles.bottonInicio}
-                onPress={()=>console.log("Click!!!")}
+                onPress={() => navigation.navigate("login")}
             />
         </ScrollView>
     )
@@ -33,8 +36,7 @@ const styles = StyleSheet.create({
     image:{
         height:300,
         width:"100%",
-        marginBottom:10,
-        textAlign:"center"
+        marginBottom:10
     },
     title:{
         fontWeight:"bold",
@@ -46,9 +48,9 @@ const styles = StyleSheet.create({
         textAlign:"justify",
         marginVertical:10,
         marginBottom:20,
-        color: "#d11f0d"
+        color: "#d64a34"
     },
     bottonInicio:{
-        backgroundColor:"#d11f0d"
+        backgroundColor:"#d64a34"
     }
 })

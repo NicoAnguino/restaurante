@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Loading from '../../componentes/Loading'
-import { buscarUsuarioActual } from '../../utilidades/acciones'
+import { esUsuarioLogueado } from '../../utilidades/acciones'
 
 import UsuarioInvitado from './UsuarioInvitado'
 import UsuarioLogueado from './UsuarioLogueado'
@@ -10,8 +10,7 @@ export default function Account() {
     const [logueo, setLogueo] = useState(null)
     
     useEffect(() => {  
-        const usuarioActual = buscarUsuarioActual()
-        usuarioActual ? setLogueo(true) : setLogueo(false)
+        setLogueo(esUsuarioLogueado())
     }, [])
 
     if(logueo == null){

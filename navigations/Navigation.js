@@ -9,10 +9,11 @@ import TopRestaurantes from '../screens/TopRestaurantes'
 import Buscar from '../screens/Buscar'
 import Account from '../screens/account/Account'
 import { Icon } from 'react-native-elements/dist/icons/Icon'
+import RestaurantesStack from './RestaurantesStack'
 
 const Tab = createBottomTabNavigator()
 
-export default function Navegacion() {
+export default function Navigation() {
 
     const screenOptions = (route, color) => {
         let nombreIcono 
@@ -58,7 +59,7 @@ export default function Navegacion() {
            >
                 <Tab.Screen 
                     name="restaurantes"
-                    component={Restaurantes}
+                    component={RestaurantesStack}
                     options={{title:"Restaurantes"}}
                 />
                   <Tab.Screen 
