@@ -1,6 +1,8 @@
+import { size } from 'lodash'
 import React, {useState} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button, Icon, Input } from 'react-native-elements'
+import { validateEmail } from '../../utilidades/helpers'
 
 export default function RegisterForm() {
     const [mostrarPassword, setMostrarPassword] = useState(false)
@@ -12,8 +14,49 @@ export default function RegisterForm() {
 
     const [datosFormulario, setDatosFormulario] = useState(valoresPorDefectoFormulario())
 
+    const [errorEmail, setErrorEmail] = useState("")
+    const [errorPassword, setErrorPassword] = useState("")
+    const [errorConfirm, setErrorConfirm] = useState("")
+
     const onChange = (e, type) => {
-        setDatosFormulario({ ...datosFormulario, [type]: e.nativeEvent.text })
+        setDatosFormulario({ ...datosFormulario, [type]: e.nativeEvent.text })   
+    }
+
+    const registrarUsuario = () => {
+        if(!validarDato()){
+            return;
+        }
+        console.log("Sigue!")
+    }
+
+    const validarDato = () => {
+        setErrorConfirm("")
+        setErrorEmail("")
+        setErrorPassword("")
+        let esValido = true
+
+        if(!validateEmail(datosFormulario.email)){
+            setErrorEmail("Debes de ingresar un Email Válido.")
+            esValido=false
+        }
+
+        if(size(datosFormulario.password) < 6){
+            setErrorPassword("La contraseña debe tener al menos 6 dígitos.")
+            esValido = false
+        }
+
+        if(size(datosFormulario.confirm) < 6){
+            setErrorConfirm("La confirmación de contraseña debe tener al menos 6 dígitos.")
+            esValido = false
+        }
+        
+        if(datosFormulario.password !== datosFormulario.confirm){
+            setErrorPassword("La contraseña y la confirmación no coinciden.")
+            setErrorConfirm("La contraseña y la confirmación no coinciden.")
+            esValido = false
+        }
+        
+        return esValido
     }
 
     return (
@@ -24,6 +67,9 @@ export default function RegisterForm() {
                 containerStyle={styles.input}
                 placeholder="Ingresa tu Email..."
                 onChange={(e) => onChange(e, "email")}
+                keyboardType = "email-address"
+                errorMessage={errorEmail}
+                defaultValue={datosFormulario.email}
             />
             <Input 
                 containerStyle={styles.input}
@@ -31,6 +77,8 @@ export default function RegisterForm() {
                 password={true}
                 secureTextEntry={!mostrarPassword}
                 onChange={(e) => onChange(e, "password")}
+                errorMessage={errorPassword}
+                defaultValue={datosFormulario.password}
                 rightIcon={
                     <Icon
                         type="material-community"
@@ -46,6 +94,8 @@ export default function RegisterForm() {
                 password={true}
                 secureTextEntry={!mostrarPassword}
                 onChange={(e) => onChange(e, "confirm")}
+                errorMessage={errorConfirm}
+                defaultValue={datosFormulario.confirm}
                 rightIcon={
                     <Icon
                         type="material-community"
@@ -59,7 +109,7 @@ export default function RegisterForm() {
                 containerStyle={styles.btnContainer}
                 buttonStyle={styles.btnRegistrar}
                 title="Registrar Nuevo Usuario"
-                onPress={() => console.log(datosFormulario)}
+                onPress={() => registrarUsuario()}
             />
         </View>
     )
