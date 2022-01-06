@@ -4,6 +4,17 @@ import { Button, Icon, Input } from 'react-native-elements'
 
 export default function RegisterForm() {
     const [mostrarPassword, setMostrarPassword] = useState(false)
+ 
+
+    const valoresPorDefectoFormulario = () => {
+        return{email: "", password: "", confirm: ""}
+    }
+
+    const [datosFormulario, setDatosFormulario] = useState(valoresPorDefectoFormulario())
+
+    const onChange = (e, type) => {
+        setDatosFormulario({ ...datosFormulario, [type]: e.nativeEvent.text })
+    }
 
     return (
         <View
@@ -12,12 +23,14 @@ export default function RegisterForm() {
             <Input 
                 containerStyle={styles.input}
                 placeholder="Ingresa tu Email..."
+                onChange={(e) => onChange(e, "email")}
             />
             <Input 
                 containerStyle={styles.input}
                 placeholder="Ingresa tu Contraseña..."
                 password={true}
                 secureTextEntry={!mostrarPassword}
+                onChange={(e) => onChange(e, "password")}
                 rightIcon={
                     <Icon
                         type="material-community"
@@ -32,6 +45,7 @@ export default function RegisterForm() {
                 placeholder="Confirma tu Contraseña..."
                 password={true}
                 secureTextEntry={!mostrarPassword}
+                onChange={(e) => onChange(e, "confirm")}
                 rightIcon={
                     <Icon
                         type="material-community"
@@ -45,6 +59,7 @@ export default function RegisterForm() {
                 containerStyle={styles.btnContainer}
                 buttonStyle={styles.btnRegistrar}
                 title="Registrar Nuevo Usuario"
+                onPress={() => console.log(datosFormulario)}
             />
         </View>
     )
