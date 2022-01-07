@@ -10,14 +10,11 @@ import { registrarUsuario } from '../../utilidades/acciones'
 import Loading from '../Loading'
 
 export default function RegisterForm() {
-    const [mostrarPassword, setMostrarPassword] = useState(false)
- 
-    const valoresPorDefectoFormulario = () => {
-        return{email: "", password: "", confirm: ""}
-    }
-
+    
+  
+    
+    const [mostrarPassword, setMostrarPassword] = useState(false)   
     const [datosFormulario, setDatosFormulario] = useState(valoresPorDefectoFormulario())
-
     const [errorEmail, setErrorEmail] = useState("")
     const [errorPassword, setErrorPassword] = useState("")
     const [errorConfirm, setErrorConfirm] = useState("")
@@ -133,6 +130,10 @@ export default function RegisterForm() {
             />
         </View>
     )
+}
+
+const valoresPorDefectoFormulario = () => {
+    return{email: "", password: "", confirm: ""}
 }
 
 const styles = StyleSheet.create({
