@@ -15,3 +15,17 @@ export const esUsuarioLogueado = () => {
 export const buscarUsuarioActual = () => {
     return firebase.auth().currentUser
 }
+
+export const cerrarSesion = () => {
+    return firebase.auth().signOut()
+}
+
+export const usuarioRegistrado = async(email, password) => {
+    const resultado = { statusResponse: true, error: null}
+    try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password)
+    } catch (error) {
+        resultado.error = "Este correo ya ha sido registrado."
+    }
+    return resultado
+}
