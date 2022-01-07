@@ -1,7 +1,10 @@
 import { useNavigation } from '@react-navigation/native'
+import { isEmpty } from 'lodash'
 import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button, Icon, Input } from 'react-native-elements'
+import { loguearUsuario } from '../../utilidades/acciones'
+import { validateEmail } from '../../utilidades/helpers'
 import Loading from '../Loading'
 
 export default function LoginForm() {
@@ -17,8 +20,40 @@ export default function LoginForm() {
         setDatosFormulario({ ...datosFormulario, [type]: e.nativeEvent.text })   
     }
 
-    const validarIniciarSesion = () => {
-        console.log("login!")
+    const validarIniciarSesion = async() => {
+        if(!validarDatos()){
+            return;
+        }
+
+        setCargando(true)
+        const resultado = await loguearUsuario(datosFormulario.email, datosFormulario.password)
+        setCargando(false)
+
+        if(!resultado.statusResponse){
+            setErrorEmail(resultado.error)
+            setErrorPassword(resultado.error)
+            return
+        }
+
+        navigation.navigate("account")
+    }
+
+    const validarDatos = () => {
+        setErrorEmail("")
+        setErrorPassword("")
+        let esValido = true
+
+        if(!validateEmail(datosFormulario.email)){
+            setErrorEmail("Debes de ingresar un Email Válido.")
+            esValido=false
+        }
+
+        if(isEmpty(datosFormulario.password)){
+            setErrorPassword("Debes de ingresar una Contraseña.")
+            esValido=false
+        }
+        
+        return esValido
     }
 
     return (
@@ -71,7 +106,7 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems:"center",
         justifyContent:"center",
-        marginTop:30
+        marginTop:20
     },
     input:{
         width: "100%"

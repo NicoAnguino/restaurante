@@ -27,13 +27,14 @@ export default function RegisterForm() {
     }
 
     const validarRegistrarUsuario = async() => {
-        if(!validarDato()){
+        if(!validarDatos()){
             return;
         }
         
         setCargando(true)
         const resultado = await registrarUsuario(datosFormulario.email, datosFormulario.password)
         setCargando(false)
+        
         if(!resultado.statusResponse){
             setErrorEmail(resultado.error)
             return
@@ -42,7 +43,7 @@ export default function RegisterForm() {
         navigation.navigate("account")
     }
 
-    const validarDato = () => {
+    const validarDatos = () => {
         setErrorConfirm("")
         setErrorEmail("")
         setErrorPassword("")
