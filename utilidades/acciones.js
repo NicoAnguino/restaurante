@@ -20,7 +20,7 @@ export const cerrarSesion = () => {
     return firebase.auth().signOut()
 }
 
-export const usuarioRegistrado = async(email, password) => {
+export const registrarUsuario = async(email, password) => {
     const resultado = { statusResponse: true, error: null}
     try {
         await firebase.auth().createUserWithEmailAndPassword(email, password)

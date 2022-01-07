@@ -1,13 +1,16 @@
-import { size } from 'lodash'
+
 import React, {useState} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button, Icon, Input } from 'react-native-elements'
+import { size } from 'lodash'
+import { useNavigation } from '@react-navigation/native'
+
 import { validateEmail } from '../../utilidades/helpers'
+import { registrarUsuario } from '../../utilidades/acciones'
 
 export default function RegisterForm() {
     const [mostrarPassword, setMostrarPassword] = useState(false)
  
-
     const valoresPorDefectoFormulario = () => {
         return{email: "", password: "", confirm: ""}
     }
@@ -18,15 +21,24 @@ export default function RegisterForm() {
     const [errorPassword, setErrorPassword] = useState("")
     const [errorConfirm, setErrorConfirm] = useState("")
 
+    const navigation = useNavigation()
+
     const onChange = (e, type) => {
         setDatosFormulario({ ...datosFormulario, [type]: e.nativeEvent.text })   
     }
 
-    const registrarUsuario = () => {
+    const validarRegistrarUsuario = async() => {
         if(!validarDato()){
             return;
         }
-        console.log("Sigue!")
+        
+        const resultado = await registrarUsuario(datosFormulario.email, datosFormulario.password)
+        if(!resultado.statusResponse){
+            setErrorEmail(resultado.error)
+            return
+        }
+
+        navigation.navigate("account")
     }
 
     const validarDato = () => {
@@ -109,7 +121,7 @@ export default function RegisterForm() {
                 containerStyle={styles.btnContainer}
                 buttonStyle={styles.btnRegistrar}
                 title="Registrar Nuevo Usuario"
-                onPress={() => registrarUsuario()}
+                onPress={() => validarRegistrarUsuario()}
             />
         </View>
     )
