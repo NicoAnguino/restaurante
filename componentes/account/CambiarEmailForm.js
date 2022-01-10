@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button, Icon, Input } from 'react-native-elements'
 
-import { actualizarPerfil } from '../../utilidades/acciones'
+import { actualizarEmail, reAutenticar } from '../../utilidades/acciones'
 import { validateEmail } from '../../utilidades/helpers'
 
 export default function CambiarEmailForm({ email,setMostrarModal,toastRef,setRecargarUsuario }) {
@@ -19,17 +19,24 @@ export default function CambiarEmailForm({ email,setMostrarModal,toastRef,setRec
             return
         }
 
-        // setCargando(true)
-        // const resultado = await actualizarPerfil({email:nuevoEmailUsuario})
-        // setCargando(false)
-
-        // if(!resultado.statusResponse){
-        //     setError("Error al actualizar email")
-        //     return
-        // }
-        // setRecargarUsuario(true)
-        // toastRef.current.show("Se han actualizado nombre y apellido", 3000)
-        // setMostrarModal(false)
+        setCargando(true)
+        const resultadoReAutentitacion = await reAutenticar(password)
+         if(!resultadoReAutentitacion.statusResponse){
+            setCargando(false)
+            setError("Contraseña incorrecta.")
+            return
+        }
+        
+        
+        const resultadoCambiarEmail = await actualizarEmail(nuevoEmailUsuario)       
+        if(!resultadoCambiarEmail.statusResponse){
+            setCargando(false)
+            setError("No puedes cambiar este correo, ya está en uso por otro usuario.")
+            return
+        }
+        setRecargarUsuario(true)
+        toastRef.current.show("Se ha actualizado el Email", 3000)
+        setMostrarModal(false)
     }
 
     const validarFormulario = () => {

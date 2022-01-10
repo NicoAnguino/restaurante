@@ -69,3 +69,28 @@ export const actualizarPerfil = async(data) =>{
     }
     return resultado
 }
+
+export const reAutenticar = async(password) =>{
+    const resultado =  { statusResponse: true, error:null}
+    const usuario = buscarUsuarioActual()
+    const credenciales = firebase.auth.EmailAuthProvider.credential(usuario.email, password)
+
+    try {
+        await usuario.reauthenticateWithCredential(credenciales)
+    } catch (error) {
+        resultado.statusResponse = false
+        resultado.error = error
+    }
+    return resultado
+}
+
+export const actualizarEmail = async(email) =>{
+    const resultado =  { statusResponse: true, error:null}
+    try {
+        await firebase.auth().currentUser.updateEmail(email)
+    } catch (error) {
+        resultado.statusResponse = false
+        resultado.error = error
+    }
+    return resultado
+}
