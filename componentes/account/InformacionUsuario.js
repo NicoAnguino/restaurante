@@ -1,13 +1,35 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, {useState} from 'react'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import { Avatar } from 'react-native-elements'
+import { actualizarPerfil, subirImagen } from '../../utilidades/acciones'
 import { importarImagenGaleria } from '../../utilidades/helpers'
 
-export default function InformacionUsuario({usuario}) {
+export default function InformacionUsuario({usuario,setCargando,setCargandoTexto}) {
        
+    const [urlImagen, setUrlImagen] = useState(usuario.photoURL)
     const cambiarFoto = async() => {
         const result = await importarImagenGaleria([1,1])
-        console.log(result)
+       
+        if(!result.status){
+            return
+        }
+
+        setCargandoTexto("Actualizando imagen...")
+        setCargando(true)
+        const resultadoSubirImagen = await subirImagen(result.image, "avatares", usuario.uid)
+        if(!resultadoSubirImagen.statusResponse){
+            setCargando(false)
+            Alert.alert("Ha ocurrido un error al almacenar la foto de perfil.")
+            return
+        }
+        const resultadoActualizarPerfil = await actualizarPerfil({photoURL: resultadoSubirImagen.url})
+        setCargando(false)
+        if(resultadoActualizarPerfil.statusResponse){
+            console.log(resultadoSubirImagen.url)
+            setUrlImagen(resultadoSubirImagen.url)
+        }else{
+            Alert.alert("Ha ocurrido un error al actualizar la foto de perfil.")
+        }
     }
 
     return (
@@ -17,8 +39,8 @@ export default function InformacionUsuario({usuario}) {
                 size="large"
                 onPress={() => cambiarFoto()}
                 source={
-                    usuario.photoURL
-                    ? {url: usuario.photoURL}
+                    urlImagen
+                    ? {uri: urlImagen}
                     : require("../../assets/avatar-default.jpg")
                 }
             />
