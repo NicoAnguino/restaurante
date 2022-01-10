@@ -7,7 +7,7 @@ import CambiarNombreForm from './CambiarNombreForm';
 
 
 
-export default function OpcionesCuenta({usuario, toastRef}) {
+export default function OpcionesCuenta({usuario, toastRef, setRecargarUsuario}) {
    
 
     const [mostrarModal, setMostrarModal] = useState(false)
@@ -22,6 +22,7 @@ export default function OpcionesCuenta({usuario, toastRef}) {
                         displayName={usuario.displayName}
                         setMostrarModal={setMostrarModal}
                         toastRef={toastRef}
+                        setRecargarUsuario = {setRecargarUsuario}
                     />
                 )  
                 break;

@@ -16,10 +16,12 @@ export default function UsuarioLogueado() {
     const [cargando, setCargando] = useState(false)
     const [cargandoTexto, setCargandoTexto] = useState("")
     const [usuario, setUsuario] = useState(null)
+    const [recargarUsuario, setRecargarUsuario] = useState(false)
 
     useEffect(() => {
         setUsuario(buscarUsuarioActual())
-    }, [])
+        setRecargarUsuario(false)
+    }, [recargarUsuario])
 
     return (
         <View style={styles.container}>
@@ -35,6 +37,7 @@ export default function UsuarioLogueado() {
                     <OpcionesCuenta
                     usuario={usuario} 
                     toastRef={toastRef}
+                    setRecargarUsuario={setRecargarUsuario}
                     />
                     </View>)
             }
