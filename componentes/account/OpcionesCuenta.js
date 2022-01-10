@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Icon, ListItem } from 'react-native-elements';
 import Modal from '../Modal';
+import CambiarEmailForm from './CambiarEmailForm';
 import CambiarNombreForm from './CambiarNombreForm';
 
 
@@ -28,7 +29,12 @@ export default function OpcionesCuenta({usuario, toastRef, setRecargarUsuario}) 
                 break;
             case "email":
                 setRenderComponent(
-                    <Text>email</Text>
+                    <CambiarEmailForm
+                        email={usuario.email}
+                        setMostrarModal={setMostrarModal}
+                        toastRef={toastRef}
+                        setRecargarUsuario = {setRecargarUsuario}
+                    />
                 )  
                 break;
             case "password":
