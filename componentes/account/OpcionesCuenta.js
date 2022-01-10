@@ -1,10 +1,15 @@
 import { map } from 'lodash';
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Icon, ListItem } from 'react-native-elements';
+import Modal from '../Modal';
+
+
 
 export default function OpcionesCuenta({user, toastRef}) {
     const menuOpciones = generarOpciones();
+    const [mostrarModal, setMostrarModal] = useState(false)
+  
 
     return (
         <View>            
@@ -13,6 +18,7 @@ export default function OpcionesCuenta({user, toastRef}) {
                     <ListItem
                         key={index}
                         style={styles.menuItem}
+                        onPress={menu.onPress}
                     >
                         <Icon
                             type="material-community"
@@ -30,11 +36,14 @@ export default function OpcionesCuenta({user, toastRef}) {
                     </ListItem>
                 ))
             }
+            <Modal isVisible={mostrarModal} setMostrarModal={setMostrarModal}>
+                <Text>Texto dentro del Modal</Text>
+            </Modal>
         </View>
     )
 }
 
-function generarOpciones(){
+const generarOpciones = () => {
     return [
         {
             titulo:"Cambiar Nombre y Apellido",
@@ -42,6 +51,7 @@ function generarOpciones(){
             colorIconoIzq:"#a7bfd3",
             nombreIconoDer:"chevron-right",
             colorIconoDer:"#a7bfd3",
+            onPress: () => componenteSeleccionado("displayName")
         },
         {
             titulo:"Cambiar Email",
@@ -49,6 +59,7 @@ function generarOpciones(){
             colorIconoIzq:"#a7bfd3",
             nombreIconoDer:"chevron-right",
             colorIconoDer:"#a7bfd3",
+            onPress: () => componenteSeleccionado("email")
         },
         {
             titulo:"Cambiar Contraseña",
@@ -56,8 +67,14 @@ function generarOpciones(){
             colorIconoIzq:"#a7bfd3",
             nombreIconoDer:"chevron-right",
             colorIconoDer:"#a7bfd3",
+            onPress: () => componenteSeleccionado("password")
         }
     ]
+}
+
+const componenteSeleccionado = (key) => {
+    console.log(key)
+ 
 }
 
 const styles = StyleSheet.create({
