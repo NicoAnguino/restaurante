@@ -25,7 +25,6 @@ export default function InformacionUsuario({usuario,setCargando,setCargandoTexto
         const resultadoActualizarPerfil = await actualizarPerfil({photoURL: resultadoSubirImagen.url})
         setCargando(false)
         if(resultadoActualizarPerfil.statusResponse){
-            console.log(resultadoSubirImagen.url)
             setUrlImagen(resultadoSubirImagen.url)
         }else{
             Alert.alert("Ha ocurrido un error al actualizar la foto de perfil.")

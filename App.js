@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, LogBox, Text, View } from 'react-native';
 import Navigation from './navigations/Navigation';
+
+LogBox.ignoreAllLogs()
 
 export default function App() {
   return (

@@ -62,7 +62,7 @@ export const subirImagen = async(imagen, path, name) =>{
 export const actualizarPerfil = async(data) =>{
     const resultado =  { statusResponse: true, error:null}
     try {
-        
+        await firebase.auth().currentUser.updateProfile(data)
     } catch (error) {
         resultado.error = error
     }
