@@ -5,6 +5,7 @@ import { Icon, ListItem } from 'react-native-elements';
 import Modal from '../Modal';
 import CambiarEmailForm from './CambiarEmailForm';
 import CambiarNombreForm from './CambiarNombreForm';
+import CambiarPasswordForm from './CambiarPasswordForm';
 
 
 
@@ -39,7 +40,10 @@ export default function OpcionesCuenta({usuario, toastRef, setRecargarUsuario}) 
                 break;
             case "password":
                 setRenderComponent(
-                    <Text>password</Text>
+                    <CambiarPasswordForm
+                        setMostrarModal={setMostrarModal}
+                        toastRef={toastRef}
+                    />
                 )  
                 break;
         }

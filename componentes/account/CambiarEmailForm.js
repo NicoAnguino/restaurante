@@ -45,9 +45,6 @@ export default function CambiarEmailForm({ email,setMostrarModal,toastRef,setRec
         
         let esValido = true;
 
-        // console.log("Nuevo email: ",nuevoEmailUsuario)
-        // console.log("Email actual: ",email)
-
         if(!validateEmail(nuevoEmailUsuario)){
             setErrorEmail("Formato de email incorrecto.")
             esValido = false
