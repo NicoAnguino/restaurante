@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         marginBottom:20
     },
     container:{
-        marginHorizontal:40
+        marginHorizontal:10
     },
     divider:{
         backgroundColor:"#d64a34",

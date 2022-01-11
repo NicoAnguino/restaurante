@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-export default function Restaurantes() {
+export default function NuevoRestauranteForm({toastRef, setCargando}) {
     return (
         <View>
-            <Text>Listado de Restaurantes</Text>
+            <Text>Formulario de Agregar restaurante...</Text>
         </View>
     )
 }

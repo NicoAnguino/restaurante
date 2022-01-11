@@ -28,9 +28,9 @@ export default function CambiarEmailForm({ email,setMostrarModal,toastRef,setRec
         }
         
         
-        const resultadoCambiarEmail = await actualizarEmail(nuevoEmailUsuario)       
+        const resultadoCambiarEmail = await actualizarEmail(nuevoEmailUsuario) 
+        setCargando(false)      
         if(!resultadoCambiarEmail.statusResponse){
-            setCargando(false)
             setError("No puedes cambiar este correo, ya está en uso por otro usuario.")
             return
         }
