@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Input,Button } from 'react-native-elements'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { Input,Button, Icon } from 'react-native-elements'
 import CountryPicker from 'react-native-country-picker-modal'
 
 export default function NuevoRestauranteForm({toastRef, setCargando, navigation}) {
@@ -26,12 +26,31 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
                 errorTelefono={errorTelefono}
                 errorDireccion={errorDireccion}
             />
+            <SubirImagen
+            />
             <Button 
                 title="Crear Restaurante"
                 onPress={agregarRestaurante}
                 buttonStyle={styles.btnAgregarRestaurante}
             />
         </View>
+    )
+}
+
+
+function SubirImagen(){
+    return(
+        <ScrollView
+            horizontal
+            style={styles.vistaImagen}
+        >
+            <Icon
+                type="material-community"
+                name="camera"
+                color="#7a7a7a"
+                containerStyle={styles.containerIcon}
+            />
+        </ScrollView>
     )
 }
 
@@ -136,5 +155,18 @@ const styles = StyleSheet.create({
     btnAgregarRestaurante:{
         margin:20,
         backgroundColor:"#d64a34"
+    },
+    vistaImagen:{
+        flexDirection:"row",
+        marginHorizontal:20,
+        marginTop:30
+    },
+    containerIcon:{
+        alignItems:"center",
+        justifyContent:"center",
+        marginRight:10,
+        height:70,
+        width:70,
+        backgroundColor:"#e3e3e3"
     }
 })
