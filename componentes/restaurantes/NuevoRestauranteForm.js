@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { Input,Button, Icon, Avatar } from 'react-native-elements'
 import CountryPicker from 'react-native-country-picker-modal'
 import { map, size } from 'lodash'
+import { importarImagenGaleria } from '../../utilidades/helpers'
 
 export default function NuevoRestauranteForm({toastRef, setCargando, navigation}) {
     const [datosFormulario, setDatosFormulario] = useState(valoresDefectoFormulario())
@@ -43,7 +44,16 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
 }
 
 
-function SubirImagen(toastRef,imagenesSeleccionadas,setImagenesSeleccionadas){
+function SubirImagen({toastRef,imagenesSeleccionadas,setImagenesSeleccionadas}){
+    const imagenSeleccionada = async() => {
+        const response = await importarImagenGaleria([4,3])
+        if(!response.status){
+            toastRef.current.show("No has seleccionado ninguna imagen.", 3000)
+            return
+        }
+        setImagenesSeleccionadas([...imagenesSeleccionadas, response.image])
+    }
+
     return(
         <ScrollView
             horizontal
@@ -51,21 +61,24 @@ function SubirImagen(toastRef,imagenesSeleccionadas,setImagenesSeleccionadas){
         >
             {
                 size(imagenesSeleccionadas) < 10 && (
-                <Icon
-                    type="material-community"
-                    name="camera"
-                    color="#7a7a7a"
-                    containerStyle={styles.containerIcon}
-                />
+                    <Icon
+                        type="material-community"
+                        name="camera"
+                        color="#7a7a7a"
+                        containerStyle={styles.containerIcon}
+                        onPress={imagenSeleccionada}
+                    />
                 )
             }
             {
                 map(imagenesSeleccionadas, (imagenRestaurante, index) => (
+                   
                     <Avatar
                         key={index}
                         style={styles.miniatura}
                         source={{uri: imagenRestaurante}}
                     />
+                   
                 ))
             }
         </ScrollView>
