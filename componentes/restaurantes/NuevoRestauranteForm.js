@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import { Input,Button, Icon } from 'react-native-elements'
+import { Input,Button, Icon, Avatar } from 'react-native-elements'
 import CountryPicker from 'react-native-country-picker-modal'
+import { map, size } from 'lodash'
 
 export default function NuevoRestauranteForm({toastRef, setCargando, navigation}) {
     const [datosFormulario, setDatosFormulario] = useState(valoresDefectoFormulario())
@@ -10,6 +11,7 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
     const [errorEmail, setErrorEmail] = useState(null)
     const [errorTelefono, setErrorTelefono] = useState(null)
     const [errorDireccion, setErrorDireccion] = useState(null)
+    const [imagenesSeleccionadas, setImagenesSeleccionadas] = useState([])
 
     const agregarRestaurante = () => {
         console.log(datosFormulario)
@@ -27,6 +29,9 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
                 errorDireccion={errorDireccion}
             />
             <SubirImagen
+                toastRef={toastRef}
+                imagenesSeleccionadas={imagenesSeleccionadas}
+                setImagenesSeleccionadas={setImagenesSeleccionadas}
             />
             <Button 
                 title="Crear Restaurante"
@@ -38,18 +43,31 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
 }
 
 
-function SubirImagen(){
+function SubirImagen(toastRef,imagenesSeleccionadas,setImagenesSeleccionadas){
     return(
         <ScrollView
             horizontal
             style={styles.vistaImagen}
         >
-            <Icon
-                type="material-community"
-                name="camera"
-                color="#7a7a7a"
-                containerStyle={styles.containerIcon}
-            />
+            {
+                size(imagenesSeleccionadas) < 10 && (
+                <Icon
+                    type="material-community"
+                    name="camera"
+                    color="#7a7a7a"
+                    containerStyle={styles.containerIcon}
+                />
+                )
+            }
+            {
+                map(imagenesSeleccionadas, (imagenRestaurante, index) => (
+                    <Avatar
+                        key={index}
+                        style={styles.miniatura}
+                        source={{uri: imagenRestaurante}}
+                    />
+                ))
+            }
         </ScrollView>
     )
 }
@@ -168,5 +186,10 @@ const styles = StyleSheet.create({
         height:70,
         width:70,
         backgroundColor:"#e3e3e3"
+    },
+    miniatura:{
+        width:70,
+        height:70,
+        marginRight:10
     }
 })
