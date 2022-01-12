@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native'
 import { Input,Button, Icon, Avatar } from 'react-native-elements'
 import CountryPicker from 'react-native-country-picker-modal'
-import { map, size } from 'lodash'
+import { map, size, filter } from 'lodash'
+
 import { importarImagenGaleria } from '../../utilidades/helpers'
 
 export default function NuevoRestauranteForm({toastRef, setCargando, navigation}) {
@@ -54,6 +55,31 @@ function SubirImagen({toastRef,imagenesSeleccionadas,setImagenesSeleccionadas}){
         setImagenesSeleccionadas([...imagenesSeleccionadas, response.image])
     }
 
+    const eliminarImagen = (imagenEliminar) => {
+        Alert.alert(
+            "Eliminar Imagen",
+            "¿Estás seguro de eliminar la imagen?",
+            [
+                {
+                    text:"No",
+                    style:"cancel"
+                },
+                {
+                    text:"Si",
+                    onPress:() => {
+                        setImagenesSeleccionadas(
+                            filter(imagenesSeleccionadas, (imageUrl) => imageUrl !== imagenEliminar)
+                        )
+                    }
+                }
+            ],
+            {
+                cancelable:true
+            }
+        )    
+    }
+    
+
     return(
         <ScrollView
             horizontal
@@ -77,6 +103,7 @@ function SubirImagen({toastRef,imagenesSeleccionadas,setImagenesSeleccionadas}){
                         key={index}
                         style={styles.miniatura}
                         source={{uri: imagenRestaurante}}
+                        onPress={() => eliminarImagen(imagenRestaurante)}
                     />
                    
                 ))
