@@ -1,10 +1,12 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native'
-import { Input,Button, Icon, Avatar } from 'react-native-elements'
+import { StyleSheet, Dimensions, Text, View, ScrollView, Alert } from 'react-native'
+import { Input,Button, Icon, Avatar, Image } from 'react-native-elements'
 import CountryPicker from 'react-native-country-picker-modal'
 import { map, size, filter } from 'lodash'
 
 import { importarImagenGaleria } from '../../utilidades/helpers'
+
+const widthScreen = Dimensions.get("window").width
 
 export default function NuevoRestauranteForm({toastRef, setCargando, navigation}) {
     const [datosFormulario, setDatosFormulario] = useState(valoresDefectoFormulario())
@@ -20,7 +22,10 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
     }
     
     return (
-        <View style={styles.vistaContenedora}>
+        <ScrollView style={styles.vistaContenedora}>
+            <ImagenRestaurante 
+                imagenRestaurante={imagenesSeleccionadas[0]}
+            />
             <AgregarFormulario
                 datosFormulario={datosFormulario}
                 setDatosFormulario={setDatosFormulario}
@@ -40,10 +45,22 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
                 onPress={agregarRestaurante}
                 buttonStyle={styles.btnAgregarRestaurante}
             />
-        </View>
+        </ScrollView>
     )
 }
 
+function ImagenRestaurante({imagenRestaurante}){
+    return (
+        <View style={styles.vistaFoto}>
+            <Image
+                style={{width:widthScreen, height:200}}
+                source={
+                    imagenRestaurante ? {uri: imagenRestaurante} : require("../../assets/no-image.png")
+                }
+            />
+        </View>
+    )
+}
 
 function SubirImagen({toastRef,imagenesSeleccionadas,setImagenesSeleccionadas}){
     const imagenSeleccionada = async() => {
@@ -231,5 +248,10 @@ const styles = StyleSheet.create({
         width:70,
         height:70,
         marginRight:10
+    },
+    vistaFoto:{
+        alignItems:"center",
+        height:200,
+        marginBottom:20
     }
 })
