@@ -1,10 +1,12 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { StyleSheet, Dimensions, Text, View, ScrollView, Alert } from 'react-native'
 import { Input,Button, Icon, Avatar, Image } from 'react-native-elements'
 import CountryPicker from 'react-native-country-picker-modal'
 import { map, size, filter } from 'lodash'
+import MapView from 'react-native-maps'
 
-import { importarImagenGaleria } from '../../utilidades/helpers'
+import { buscarLocalizacionUsuario, importarImagenGaleria } from '../../utilidades/helpers'
+import Modal from '../../componentes/Modal'
 
 const widthScreen = Dimensions.get("window").width
 
@@ -16,6 +18,8 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
     const [errorTelefono, setErrorTelefono] = useState(null)
     const [errorDireccion, setErrorDireccion] = useState(null)
     const [imagenesSeleccionadas, setImagenesSeleccionadas] = useState([])
+    const [esVisibleEnMapa, setEsVisibleEnMapa] = useState(false)
+    const [localizacionRestaurante, setLocalizacionRestaurante] = useState(null)
 
     const agregarRestaurante = () => {
         console.log(datosFormulario)
@@ -34,6 +38,8 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
                 errorEmail={errorEmail}
                 errorTelefono={errorTelefono}
                 errorDireccion={errorDireccion}
+                setEsVisibleEnMapa={setEsVisibleEnMapa}
+                localizacionRestaurante={localizacionRestaurante}
             />
             <SubirImagen
                 toastRef={toastRef}
@@ -45,7 +51,78 @@ export default function NuevoRestauranteForm({toastRef, setCargando, navigation}
                 onPress={agregarRestaurante}
                 buttonStyle={styles.btnAgregarRestaurante}
             />
+            <MapaRestaurante 
+                esVisibleEnMapa={esVisibleEnMapa}
+                setEsVisibleEnMapa={setEsVisibleEnMapa}
+                localizacionRestaurante={localizacionRestaurante}
+                setLocalizacionRestaurante={setLocalizacionRestaurante}
+                toastRef={toastRef}
+            />
         </ScrollView>
+    )
+}
+
+function MapaRestaurante({esVisibleEnMapa, setEsVisibleEnMapa, localizacionRestaurante, setLocalizacionRestaurante, toastRef}){
+
+    const [nuevaRegion, setNuevaRegion] = useState(null)
+
+    useEffect(() => {
+        (async() => {
+            const respuesta = await buscarLocalizacionUsuario()
+            if(respuesta.status){
+                setNuevaRegion(respuesta.location)
+            }
+        })()
+    },[])
+
+
+const confirmarLocalizacion = () => {
+    setLocalizacionRestaurante(nuevaRegion)
+    toastRef.current.show("Localización guardada correctamente.", 3000)
+    setEsVisibleEnMapa(false)
+}
+
+    return (
+        <Modal isVisible={esVisibleEnMapa} setMostrarModal={setEsVisibleEnMapa}>
+            <View>
+                {
+                    nuevaRegion && (
+                        <MapView
+                            style={styles.estiloMapa}
+                            initialRegion={nuevaRegion}
+                            showsUserLocation={true}
+                            onRegionChange={(region) => setNuevaRegion(region)}
+                        >
+                            <MapView.Marker 
+                                coordinate={{
+                                    latitude: nuevaRegion.latitude,
+                                    longitude: nuevaRegion.longitude
+                                }}
+                                draggable
+                            />
+                         
+                        </MapView>
+                    ) 
+              
+                }
+                
+                <View style={styles.botonesMapa}>
+                    <Button
+                        title="Guardar Ubicación"
+                        containerStyle={styles.contenedorBtnGuardarUbicacion}
+                        buttonStyle={styles.btnGuardarUbicacion}
+                        onPress={() => confirmarLocalizacion()}
+                    />
+                    <Button
+                        title="Cancelar Ubicación"
+                        containerStyle={styles.contenedorBtnCancelarUbicacion}
+                        buttonStyle={styles.btnCancelarUbicacion}
+                        onPress={()=> setEsVisibleEnMapa(false)}
+                    />
+                </View>
+                
+            </View>
+        </Modal>
     )
 }
 
@@ -129,7 +206,7 @@ function SubirImagen({toastRef,imagenesSeleccionadas,setImagenesSeleccionadas}){
     )
 }
 
-function AgregarFormulario({datosFormulario,setDatosFormulario,errorNombre,errorDescripcion,errorEmail,errorTelefono,errorDireccion}) {
+function AgregarFormulario({datosFormulario,setDatosFormulario,errorNombre,errorDescripcion,errorEmail,errorTelefono,errorDireccion,setEsVisibleEnMapa,localizacionRestaurante}) {
     const [pais, setPais] = useState("AR")
     const [codigoLlamada, setCodigoLlamada] = useState("54")
     const [telefono, setTelefono] = useState("")
@@ -151,6 +228,12 @@ function AgregarFormulario({datosFormulario,setDatosFormulario,errorNombre,error
                 defaultValue={datosFormulario.direccion}
                 onChange={(e) => onChange(e, "direccion")}
                 errorMessage={errorDireccion}
+                rightIcon={{
+                    type:"material-community",
+                    name:"google-maps",
+                    color: localizacionRestaurante ? "#639443" : "#c2c2c2" ,
+                    onPress: () => setEsVisibleEnMapa(true)
+                }}
             />
             <Input
                 keyboardType="email-address"
@@ -253,5 +336,26 @@ const styles = StyleSheet.create({
         alignItems:"center",
         height:200,
         marginBottom:20
+    },
+    estiloMapa:{
+        width:"100%",
+        height: 550
+    },
+    botonesMapa:{
+        flexDirection:"row",
+        justifyContent:"center",
+        marginTop:10
+    },
+    contenedorBtnGuardarUbicacion:{
+        paddingRight:5
+    },
+    btnGuardarUbicacion:{
+        backgroundColor:"#639443"
+    },
+    contenedorBtnCancelarUbicacion:{
+        paddingLeft:5
+    },
+    btnCancelarUbicacion:{
+        backgroundColor:"#d44932"
     }
 })
